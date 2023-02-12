@@ -7,27 +7,31 @@ import java.util.Scanner;
 
 public class FileManager {
 
-    private static Scanner scanner = new Scanner(System.in);
-    private static ArrayList<Person> persons = new ArrayList<>();
+    private static Scanner scanner;
+    private static ArrayList<Person> persons;
     private static File file;
-    private static int count = 0;
-    private static int male = 0;
-    private static int female = 0;
+    private static int count;
+    private static int male;
+    private static int female;
 
 
     private static void getFile() throws IOException {
 
+        scanner = new Scanner(System.in);
+
         System.out.println("Введите путь к файлу:");
         file = new File(scanner.nextLine());
         if (!file.exists()) {
-            file.createNewFile();
+            throw new FileNotFoundException("Такого файла не существует");
         }
     }
 
     private static void readFile() throws FileNotFoundException, PersonException {
 
+        persons = new ArrayList<>();
         Reader reader = new FileReader(file);
         String line;
+
         try (reader) {
             BufferedReader bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) {
@@ -47,8 +51,8 @@ public class FileManager {
     private static void processLine(String line) {
 
         Person person = new Person();
-        String[] lines;
-        lines = line.split(",");
+        String[] lines = line.split(",");
+
         if (lines.length == 4) {
             person.setName(lines[0].trim());
             person.setSurname(lines[1].trim());
@@ -60,8 +64,12 @@ public class FileManager {
 
     private static void workWithList() {
 
+        count = 0;
+        male = 0;
+        female = 0;
         Comparator<Person> comparator = Comparator.comparing(obj -> obj.getName());
         comparator.thenComparing(obj -> obj.getSurname());
+
         persons.sort(comparator);
         for (Person person : persons) {
             if (person.getAge() > 30) {
@@ -79,6 +87,7 @@ public class FileManager {
     private static void writeFile() throws IOException {
 
         Writer writer = new FileWriter(file);
+
         try (writer) {
             for (Person person : persons) {
                 writer.write(person.getName() + "," + person.getSurname() + "," + person.getSex() + "," + person.getAge() + "\n");
@@ -92,9 +101,9 @@ public class FileManager {
             getFile();
             readFile();
             writeFile();
+            workWithList();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        workWithList();
     }
 }

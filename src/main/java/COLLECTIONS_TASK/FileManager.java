@@ -8,24 +8,28 @@ import java.util.Scanner;
 
 public class FileManager {
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner;
     private static File file;
-    private static HashSet<Document> uniqueDocuments = new HashSet<>();
-    private static HashMap<String, Document> documentHashMap = new HashMap<>();
+    private static HashSet<Document> uniqueDocuments;
+    private static HashMap<String, Document> documentHashMap;
 
     private static void getFile() throws IOException {
+
+        scanner = new Scanner(System.in);
 
         System.out.println("Введите путь к файлу:");
         file = new File(scanner.nextLine());
         if (!file.exists()) {
-            file.createNewFile();
+            throw new FileNotFoundException("Такого файла не существует");
         }
     }
 
     private static void readFile() throws IOException {
 
+        uniqueDocuments = new HashSet<>();
         Reader reader = new FileReader(file);
         String line;
+
         try (reader) {
             BufferedReader bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) {
@@ -50,17 +54,20 @@ public class FileManager {
 
     public static void showMap() {
 
+        documentHashMap = new HashMap<>();
+
         try {
             getFile();
             readFile();
+            for (Document document : uniqueDocuments) {
+                documentHashMap.put(document.getContractNumber(), document);
+            }
+            for (Map.Entry<String, Document> map : documentHashMap.entrySet()) {
+                System.out.println(map.getKey() + " -> " + map.getValue());
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (Document document : uniqueDocuments) {
-            documentHashMap.put(document.getContractNumber(), document);
-        }
-        for (Map.Entry<String, Document> map : documentHashMap.entrySet()) {
-            System.out.println(map.getKey() + " -> " + map.getValue());
+            System.err.println(e.getMessage());
+            ;
         }
     }
 }

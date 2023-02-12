@@ -7,8 +7,6 @@ package FIRST_TASK;
  * На консоль вывести количество мужчин и женщин.
  */
 
-//PATH - src/NEW_PREPOD_TASK/PERSONS_FILE.txt
-
 public class Test {
 
     public static void main(String[] args) {
