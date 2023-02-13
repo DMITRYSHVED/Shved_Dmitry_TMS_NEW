@@ -1,33 +1,27 @@
 package COLLECTIONS_TASK;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class FileManager {
 
-    private static Scanner scanner;
-    private static File file;
-    private static HashSet<Document> uniqueDocuments;
-    private static HashMap<String, Document> documentHashMap;
+    private static Set<Document> uniqueDocuments;
 
-    private static void getFile() throws IOException {
-
-        scanner = new Scanner(System.in);
+    private static File getFile() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        File file;
 
         System.out.println("Введите путь к файлу:");
         file = new File(scanner.nextLine());
         if (!file.exists()) {
             throw new FileNotFoundException("Такого файла не существует");
         }
+        return file;
     }
 
     private static void readFile() throws IOException {
-
         uniqueDocuments = new HashSet<>();
-        Reader reader = new FileReader(file);
+        Reader reader = new FileReader(getFile());
         String line;
 
         try (reader) {
@@ -39,7 +33,6 @@ public class FileManager {
     }
 
     private static void processLine(String line) {
-
         Document document;
         String[] lines = line.split(",");
 
@@ -53,11 +46,9 @@ public class FileManager {
     }
 
     public static void showMap() {
-
-        documentHashMap = new HashMap<>();
+        HashMap<String, Document> documentHashMap = new HashMap<>();
 
         try {
-            getFile();
             readFile();
             for (Document document : uniqueDocuments) {
                 documentHashMap.put(document.getContractNumber(), document);
@@ -67,7 +58,6 @@ public class FileManager {
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
-            ;
         }
     }
 }

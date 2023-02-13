@@ -3,21 +3,16 @@ package FIRST_TASK;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileManager {
 
-    private static Scanner scanner;
-    private static ArrayList<Person> persons;
-    private static File file;
-    private static int count;
-    private static int male;
-    private static int female;
-
+    private static List<Person> persons;
+    private static File file; //использвуется в двух методах
 
     private static void getFile() throws IOException {
-
-        scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Введите путь к файлу:");
         file = new File(scanner.nextLine());
@@ -27,7 +22,6 @@ public class FileManager {
     }
 
     private static void readFile() throws FileNotFoundException, PersonException {
-
         persons = new ArrayList<>();
         Reader reader = new FileReader(file);
         String line;
@@ -49,7 +43,6 @@ public class FileManager {
     }
 
     private static void processLine(String line) {
-
         Person person = new Person();
         String[] lines = line.split(",");
 
@@ -63,10 +56,9 @@ public class FileManager {
     }
 
     private static void workWithList() {
-
-        count = 0;
-        male = 0;
-        female = 0;
+        int count = 0;
+        int male = 0;
+        int female = 0;
         Comparator<Person> comparator = Comparator.comparing(obj -> obj.getName());
         comparator.thenComparing(obj -> obj.getSurname());
 
@@ -85,7 +77,6 @@ public class FileManager {
     }
 
     private static void writeFile() throws IOException {
-
         Writer writer = new FileWriter(file);
 
         try (writer) {
@@ -96,7 +87,6 @@ public class FileManager {
     }
 
     public static void letsGo() {
-
         try {
             getFile();
             readFile();
