@@ -1,11 +1,11 @@
 package COLLECTIONS_TASK;
 
+import FIRST_TASK.Person;
+
 import java.io.*;
 import java.util.*;
 
 public class FileManager {
-
-    private static Set<Document> uniqueDocuments;
 
     private static File getFile() throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -19,41 +19,40 @@ public class FileManager {
         return file;
     }
 
-    private static void readFile() throws IOException {
-        uniqueDocuments = new HashSet<>();
-        Reader reader = new FileReader(getFile());
+    private static Set<Document> readFile(File file) throws IOException {
+        Set<Document> uniqueDocuments = new HashSet<>();
+        Reader reader = new FileReader(file);
         String line;
         BufferedReader bufferedReader = null;
 
         try (reader) {
             bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) {
-                processLine(line);
+                uniqueDocuments.add(processLine(line));
             }
         }finally {
             bufferedReader.close();
         }
+        return uniqueDocuments;
     }
 
-    private static void processLine(String line) {
-        Document document;
+    private static Document processLine(String line) {
+        Document document = new Document();
         String[] lines = line.split(",");
 
         if (lines[0].matches("((\\d{4}-)([A-Za-z]{3}-)){2}\\d[A_Za-z]\\d[A-Za-z]")) {
-            document = new Document();
             document.setContractNumber(lines[0]);
             document.setInformation(lines[1]);
             document.setCreationDate(lines[2]);
-            uniqueDocuments.add(document);
         }
+        return document;
     }
 
     public static void showMap() {
         HashMap<String, Document> documentHashMap = new HashMap<>();
 
         try {
-            readFile();
-            for (Document document : uniqueDocuments) {
+            for (Document document : readFile(getFile())) {
                 documentHashMap.put(document.getContractNumber(), document);
             }
             for (Map.Entry<String, Document> map : documentHashMap.entrySet()) {
