@@ -21,13 +21,14 @@ public class FileManager {
         }
     }
 
-    private static void readFile() throws FileNotFoundException, PersonException {
+    private static void readFile() throws IOException, PersonException {
         persons = new ArrayList<>();
         Reader reader = new FileReader(file);
         String line;
+        BufferedReader bufferedReader = null;
 
         try (reader) {
-            BufferedReader bufferedReader = new BufferedReader(reader);
+            bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.isEmpty()) {
                     continue;
@@ -39,6 +40,8 @@ public class FileManager {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            bufferedReader.close();
         }
     }
 

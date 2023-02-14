@@ -23,12 +23,15 @@ public class FileManager {
         uniqueDocuments = new HashSet<>();
         Reader reader = new FileReader(getFile());
         String line;
+        BufferedReader bufferedReader = null;
 
         try (reader) {
-            BufferedReader bufferedReader = new BufferedReader(reader);
+            bufferedReader = new BufferedReader(reader);
             while ((line = bufferedReader.readLine()) != null) {
                 processLine(line);
             }
+        }finally {
+            bufferedReader.close();
         }
     }
 
