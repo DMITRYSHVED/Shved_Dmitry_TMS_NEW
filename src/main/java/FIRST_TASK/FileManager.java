@@ -3,26 +3,24 @@ package FIRST_TASK;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Scanner;
 
 public class FileManager {
 
-    private static List<Person> persons;
-    private static File file; //использвуется в двух методах
-
-    private static void getFile() throws IOException {
+    private static File getFile() throws IOException {
         Scanner scanner = new Scanner(System.in);
+        File file;
 
         System.out.println("Введите путь к файлу:");
         file = new File(scanner.nextLine());
         if (!file.exists()) {
             throw new FileNotFoundException("Такого файла не существует");
         }
+        return file;
     }
 
-    private static void readFile() throws IOException, PersonException {
-        persons = new ArrayList<>();
+    private static ArrayList<Person> readFile(File file) throws IOException, PersonException {
+        ArrayList<Person> persons = new ArrayList<>();
         Reader reader = new FileReader(file);
         String line;
         BufferedReader bufferedReader = null;
@@ -36,16 +34,17 @@ public class FileManager {
                 if (!line.matches("([A-Za-z\s]+,){3}\\d+")) {
                     throw new PersonException("INVALID PERSON INFORMATION FORM");
                 }
-                processLine(line);
+                persons.add(processLine(line));
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             bufferedReader.close();
         }
+        return persons;
     }
 
-    private static void processLine(String line) {
+    private static Person processLine(String line) {
         Person person = new Person();
         String[] lines = line.split(",");
 
@@ -55,10 +54,10 @@ public class FileManager {
             person.setSex(lines[2].trim());
             person.setAge(Integer.parseInt(lines[3].trim()));
         }
-        persons.add(person);
+        return person;
     }
 
-    private static void workWithList() {
+    private static void workWithList(ArrayList<Person> persons) {
         int count = 0;
         int male = 0;
         int female = 0;
@@ -79,7 +78,7 @@ public class FileManager {
         System.out.println("Count: " + count + "\nMale: " + male + "\nFemale: " + female);
     }
 
-    private static void writeFile() throws IOException {
+    private static void writeFile(File file, ArrayList<Person> persons) throws IOException {
         Writer writer = new FileWriter(file);
 
         try (writer) {
@@ -91,10 +90,11 @@ public class FileManager {
 
     public static void letsGo() {
         try {
-            getFile();
-            readFile();
-            writeFile();
-            workWithList();
+            File file = getFile();
+            ArrayList<Person> persons = readFile(file);
+
+            writeFile(file, persons);
+            workWithList(persons);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
