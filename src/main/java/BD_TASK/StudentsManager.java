@@ -1,18 +1,17 @@
 package BD_TASK;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.Scanner;
 
 public class StudentsManager {
 
-    private static Logger logger = Logger.getLogger(StudentsManager.class);
-    private static Connection connection;
-    private static Scanner scanner;
-
     protected static boolean createTables() {
-        connection = MySqlConnector.getConnection();
+        Logger logger = LogManager.getLogger();
+        MySqlConnector mySqlConnector = MySqlConnector.getInstance();
+        Connection connection = mySqlConnector.getConnection();
         Statement studentsTableStatement = null;
 
         try {
@@ -45,7 +44,9 @@ public class StudentsManager {
     }
 
     protected static boolean addStudent(Student student) {
-        connection = MySqlConnector.getConnection();
+        Logger logger = LogManager.getLogger();
+        MySqlConnector mySqlConnector = MySqlConnector.getInstance();
+        Connection connection = mySqlConnector.getConnection();
         PreparedStatement preparedStatement = null;
 
         try {
@@ -73,8 +74,10 @@ public class StudentsManager {
     }
 
     protected static boolean deleteStudent() {
-        scanner = new Scanner(System.in);
-        connection = MySqlConnector.getConnection();
+        Logger logger = LogManager.getLogger();
+        Scanner scanner = new Scanner(System.in);
+        MySqlConnector mySqlConnector = MySqlConnector.getInstance();
+        Connection connection = MySqlConnector.getConnection();
         int deleteId;
         PreparedStatement preparedStatement = null;
 
@@ -110,7 +113,7 @@ public class StudentsManager {
     protected static Student createStudent() {
         Student student = new Student();
         Town town = new Town();
-        scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("ENTER STUDENT NAME:");
         student.setName(scanner.nextLine());
@@ -123,7 +126,9 @@ public class StudentsManager {
     }
 
     protected static void showInfo() {
-        connection = MySqlConnector.getConnection();
+        Logger logger = LogManager.getLogger();
+        MySqlConnector mySqlConnector = MySqlConnector.getInstance();
+        Connection connection = MySqlConnector.getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
 
@@ -156,7 +161,8 @@ public class StudentsManager {
     }
 
     protected static int getFunction() {
-        scanner = new Scanner(System.in);
+        Logger logger = LogManager.getLogger();
+        Scanner scanner = new Scanner(System.in);
         int fun;
 
         System.out.println("1- ADD STUDENT 2- DELETE STUDENT\n0- exit");
@@ -186,6 +192,8 @@ public class StudentsManager {
     }
 
     public static void showMenu() {
+        Logger logger = LogManager.getLogger();
+
         logger.info("USER CONNECTED");
         if (createTables()) {
             logger.info("TABLES CREATED SUCCESSFULLY");
