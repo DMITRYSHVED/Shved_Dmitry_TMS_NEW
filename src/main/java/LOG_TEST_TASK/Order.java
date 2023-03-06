@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Order {
 
-    String productName;
-    int quantity;
-    double totalCost;
+    private String productName;
+    private int quantity;
+    private double totalCost;
 
     public String getProductName() {
         return productName;

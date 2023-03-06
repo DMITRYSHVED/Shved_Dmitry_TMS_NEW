@@ -1,6 +1,7 @@
 package LOG_TEST_TASK;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,11 +11,9 @@ import java.util.Scanner;
 
 public class OrderManager {
 
-    private static final Logger logger = Logger.getLogger(OrderManager.class);
-    private static Scanner scanner;
-
     protected static Order createOrder() {
-        scanner = new Scanner(System.in);
+        Logger logger = LogManager.getLogger(OrderManager.class);
+        Scanner scanner = new Scanner(System.in);
         Order order = new Order();
 
         System.out.println("NAME OF PRODUCT:");
@@ -37,6 +36,7 @@ public class OrderManager {
     }
 
     protected static boolean writeOrder(Order order, File file) {
+        Logger logger = LogManager.getLogger(OrderManager.class);
         Writer writer = null;
 
         try {
@@ -58,8 +58,8 @@ public class OrderManager {
         return false;
     }
 
-    protected static int function() {
-        scanner = new Scanner(System.in);
+    protected static int choseFunction() {
+        Scanner scanner = new Scanner(System.in);
         int fun;
 
         System.out.println("1- WRITE ORDER TO FILE\n0- exit");
@@ -73,10 +73,13 @@ public class OrderManager {
 
     public static void showMenu() {
         File file = new File("src/main/java/LOG_TEST_TASK/ORDERS.txt");
+        Logger logger = LogManager.getLogger(OrderManager.class);
+        Order order;
 
-        while (function() != 0) {
+        while (choseFunction() != 0) {
+            order = createOrder();
             logger.info("USER STARTS WRITING ORDER TO FILE");
-            if (writeOrder(createOrder(), file)) {
+            if (writeOrder(order, file)) {
                 logger.info("SUCCESSFUL");
             } else {
                 logger.info("FAILURE");
