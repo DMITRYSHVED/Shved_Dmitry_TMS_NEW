@@ -1,0 +1,22 @@
+create database if not exists boooks;
+
+use boooks;
+
+create table if not exists author(id int primary key auto_increment, name varchar(20) not null,surname varchar(20) not null);
+create table if not exists book(book_id int primary key auto_increment,
+title varchar(20) not null,pages int not null,
+author_id int not null,
+foreign key(author_id) references author (id));
+
+ insert into author(name,surname) values('steven','king');
+ insert into book(title,pages,author_id) values ('green Mile','346',1);
+ insert into author(name,surname) values('dima','shved');
+ insert into book(title,pages,author_id) values ('asdf','123',1);
+ insert into author(name,surname) values('kirill','asdfg');
+ insert into book(title,pages,author_id) values ('lkjhg','456',2);
+ insert into author(name,surname) values('nbvc','wqertgyh');
+ insert into book(title,pages,author_id) values ('mnbvcxz','654',4);
+
+ select * from author join book on author.id = book.author_id;
+ select * from book where pages>300;
+ select * from author join book on author.id = book.author_id where pages > 300
